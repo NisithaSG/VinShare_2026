@@ -1,0 +1,718 @@
+:root {
+ --night-bg: #1a1a2e;
+ --card-bg: #16213e;
+ --pastel-blue: #a3c9f1;
+ --pastel-pink: #ffc2d4;
+ --star-yellow: #fceabb;
+ --text-main: #e2e2e2;
+ }
+ 
+ body {
+ margin: 0;
+ font-family: 'Nunito', sans-serif;
+ background-color: var(--night-bg);
+ color: var(--text-main);
+ transition: 0.5s;
+ overflow-x: hidden;
+ }
+
+.moon-container {
+
+    position: absolute;
+    top: 200px; /* lowered */
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    z-index: -1;
+    pointer-events: none;
+
+    width: 1220px;
+    height: 1220px;
+    background: var(--star-yellow);
+    border-radius: 50%;
+    box-shadow: 0 0 300px rgba(252, 234, 187, 0.5);
+}
+
+ .teddy-bear {
+ position: absolute;
+ top: -20px; left: 10px;
+ font-size: 40px;
+ z-index: 1;
+ }
+ .star {
+ position: absolute;
+ color: var(--star-yellow);
+ animation: twinkle 2s infinite ease-in-out;
+ z-index: -1;
+ }
+ @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+ 
+ /* Header & Nav */
+ .top-nav {
+ display: flex;
+ justify-content: space-between;
+ padding: 20px 5%;
+ align-items: center;
+ }
+ .search-container input {
+    /* Exact match to .theme-btn */
+    background: var(--card-bg);           /* Solid dark blue */
+    border: 1px solid var(--pastel-blue); /* Thin blue border */
+    border-radius: 20px;                  /* Rounded corners */
+    color: var(--text-main);              /* Light grey/white text */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* Subtle drop shadow */
+
+    /* Input specific layout */
+    padding: 10px 20px;
+    width: 250px;
+    font-family: 'Nunito', sans-serif;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Interaction: Slight lift and pink border when typing */
+.search-container input:focus {
+    border-color: var(--pastel-pink);
+    transform: translateY(-2px);
+}
+ .logo {
+ font-family: 'Fredoka', sans-serif;
+ font-size: 3.5rem;
+ text-align: center;
+ color: var(--pastel-blue);
+ margin: 20px 0 0 0;
+ }
+ .subtitle { 
+    text-align: center; 
+    color: #ffffff; 
+    font-style: italic;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); 
+}
+ 
+ /* Tabs */
+ .filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0;
+    flex-wrap: wrap; /* Ensures they don't squash on small screens */
+}
+ .filter-btn {
+    background: var(--card-bg); /* Now a solid color, not transparent */
+    border: 1px solid var(--card-border, #252a41);
+    color: var(--text-main); /* Brighter text */
+    padding: 8px 20px;
+    border-radius: 20px; /* Slightly more rounded pill shape */
+    cursor: pointer;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.filter-btn:hover {
+    background: #252a41; /* Lighten slightly on hover */
+    transform: translateY(-2px);
+}
+ .filter-btn.active {
+ border-color: var(--pastel-pink);
+ color: var(--pastel-pink);
+ }
+ 
+ /* Pinterest Grid */
+ .pinterest-grid {
+ column-count: auto;
+ column-width: 260px;
+ column-gap: 20px;
+ padding: 20px 5%;
+ }
+ 
+ .card {
+ background: var(--card-bg);
+ border-radius: 20px;
+ padding: 0 0 15px 0;
+ margin-bottom: 20px;
+ break-inside: avoid;
+ overflow: hidden;
+ border: 1px solid var(--card-border, #252a41);
+ }
+ .card img { width: 100%; height: auto; display: block; }
+ .card-content { padding: 15px; }
+ .card h3 { margin: 5px 0; color: var(--pastel-blue); }
+ .card p { font-size: 0.9rem; color: #bbb; }
+ 
+/* 1. The Glass Container */
+.audio-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: radial-gradient(circle at center, rgba(163, 201, 241, 0.1), transparent);
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+/* --- AUDIO WAVE VISUALIZER --- */
+
+.audio-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px; /* Keeps card size stable */
+    padding: 20px;
+    background: radial-gradient(circle at center, rgba(163, 201, 241, 0.1), transparent);
+    border-radius: 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* 1. The Wave Container (Hidden by default) */
+.wave-container {
+    display: none; /* Only shows when playing */
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+}
+
+/* 2. The Bars */
+.bar {
+    width: 6px;
+    background: var(--pastel-pink);
+    border-radius: 10px;
+    animation: soundWave 1s ease-in-out infinite;
+}
+
+/* Stagger the animation for a "wave" effect */
+.bar:nth-child(1) { height: 20px; animation-delay: 0.0s; }
+.bar:nth-child(2) { height: 35px; animation-delay: 0.1s; }
+.bar:nth-child(3) { height: 50px; animation-delay: 0.2s; }
+.bar:nth-child(4) { height: 35px; animation-delay: 0.3s; }
+.bar:nth-child(5) { height: 20px; animation-delay: 0.4s; }
+
+@keyframes soundWave {
+    0%, 100% { transform: scaleY(1); opacity: 0.7; }
+    50% { transform: scaleY(1.5); opacity: 1; box-shadow: 0 0 10px var(--pastel-pink); }
+}
+
+/* 3. STATE MANAGEMENT (The Magic Switch) */
+
+/* When playing: Show Wave, Hide Player */
+.audio-wrapper.playing .wave-container {
+    display: flex;
+}
+.audio-wrapper.playing audio {
+    display: none;
+}
+
+/* When paused: Show Player, Hide Wave */
+.audio-wrapper:not(.playing) .wave-container {
+    display: none;
+}
+.audio-wrapper:not(.playing) audio {
+    display: block;
+}
+
+/* Keep the dark mode style for the player when it IS visible */
+.styled-player {
+    width: 100%;
+    height: 35px;
+    border-radius: 20px;
+    opacity: 0.8;
+    filter: invert(0.9) hue-rotate(180deg);
+    outline: none;
+}
+
+/* The "Dark Mode" Audio Player Trick */
+.styled-player {
+    width: 100%;
+    height: 35px;
+    border-radius: 20px;
+    opacity: 0.8;
+    
+    /* This inverts the colors: White becomes Dark, Black becomes Light */
+    filter: invert(0.9) hue-rotate(180deg);
+    
+    /* Removes the default outline */
+    outline: none;
+}
+
+ /* Sidebar */
+ .sidebar {
+ position: fixed;
+ right: -350px; top: 0;
+ width: 300px; height: 100%;
+ background: #0f172a;
+ padding: 25px;
+ box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+ transition: 0.3s;
+ z-index: 3000;
+ }
+ .sidebar.open { right: 0; }
+ .add-btn {
+ width: 100%;
+ padding: 15px;
+ background: var(--pastel-pink);
+ border: none;
+ border-radius: 10px;
+ font-weight: bold;
+ cursor: pointer;
+ }
+ 
+ /* Overall style */
+ .modal-overlay {
+ display: none; position: fixed;
+ top:0; left:0; width:100%; height:100%;
+ background: rgba(0,0,0,0.8);
+ justify-content: center; align-items: center; z-index: 4000;
+ }
+ .modal-content {
+ background: var(--card-bg);
+ padding: 30px; border-radius: 25px; width: 400px;
+ }
+ 
+ /* Light mode colors */
+ body.light-mode {
+ --night-bg: #fdf6e3; 
+ --card-bg: #ffffff;
+ --text-main: #2c3e50; 
+ --star-yellow: #f1c40f; 
+ --card-border: #e0e0e0; 
+ }
+ 
+ /* Specific fix for Light Mode inputs */
+ body.light-mode .search-container input {
+ background: rgba(0,0,0,0.05);
+ color: #333;
+ border-color: #ccc;
+ }
+ 
+ /* Add this to the bottom of style.css */
+ .cloud-bg {
+ position: fixed;
+ top: 0; left: 0; width: 100%; height: 100%;
+ pointer-events: none; /* Allows clicking through them */
+ z-index: -1;
+ overflow: hidden;
+ }
+ 
+ .floating-cloud {
+ position: absolute;
+ width: 200px; height: 60px;
+ background: rgba(255, 255, 255, 0.05);
+ border-radius: 50px;
+ filter: blur(20px);
+ animation: float 20s linear infinite;
+ }
+ 
+ @keyframes float {
+ from { transform: translateX(-250px); }
+ to { transform: translateX(100vw); }
+ }
+
+ .theme-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--card-bg); /* Now Solid Dark Blue */
+    border: 1px solid var(--pastel-blue);
+    padding: 8px 24px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    width: auto;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-main);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* Adds a subtle shadow */
+    z-index: 10; /* Ensures they sit above stars */
+}
+
+.theme-btn:hover {
+    background: var(--pastel-blue); /* Fills with blue on hover */
+    color: var(--night-bg); /* Text turns dark for contrast */
+    border-color: var(--pastel-blue);
+    transform: translateY(-2px);
+}
+
+.star.xs {
+    font-size: 8px;
+    opacity: 0.6;
+}
+
+.star.sm {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.star.md {
+    font-size: 16px; /* original-ish size */
+    opacity: 0.8;
+}
+
+.star.lg {
+    font-size: 20px; /* max size — not bigger than original */
+    opacity: 0.9;
+}
+
+.star:nth-child(1)  { top: 10%; left: 15%; }
+.star:nth-child(2)  { top: 25%; left: 70%; }
+.star:nth-child(3)  { top: 40%; left: 30%; }
+.star:nth-child(4)  { top: 55%; left: 80%; }
+.star:nth-child(5)  { top: 65%; left: 10%; }
+.star:nth-child(6)  { top: 75%; left: 50%; }
+.star:nth-child(7)  { top: 85%; left: 25%; }
+.star:nth-child(8)  { top: 15%; left: 90%; }
+
+.star {
+    position: absolute;
+    color: var(--star-yellow);
+    animation: twinkle 2s infinite ease-in-out;
+    z-index: -1;
+}
+
+.stars-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -2; /* behind moon and content */
+}
+
+.star {
+    position: absolute;
+    color: var(--star-yellow);
+    animation: twinkle 2s infinite ease-in-out;
+    z-index: -2;
+}
+
+/* Star sizes */
+.star.tiny  { font-size: 6px; opacity: 0.5; animation-duration: 3s; }
+.star.small { font-size: 10px; opacity: 0.7; animation-duration: 2.5s; }
+.star.medium { font-size: 14px; opacity: 0.8; animation-duration: 2s; }
+
+/* Twinkle animation */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* Container for the buttons */
+.auth-buttons {
+    display: flex;       
+    gap: 15px;           
+    align-items: center; 
+}
+
+/* Sidebar Header Alignment */
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* The "X" Button Styling */
+.close-pill {
+    width: 40px;  
+    height: 40px;
+    padding: 0;      
+    border-radius: 50%; 
+    font-size: 1.2rem;  
+    line-height: 1;    
+}
+
+/* Hover effect for the X */
+.close-pill:hover {
+    background: var(--pastel-pink); /* Turns pink when you hover! */
+    border-color: var(--pastel-pink);
+    color: #1a1a2e;
+    transform: rotate(90deg);
+}
+
+/* Make the Inputs Dark & Glassy */
+.modal-content input[type="text"],
+.modal-content input[type="url"],
+.modal-content input[type="email"],
+.modal-content input[type="password"],
+.modal-content textarea,
+.modal-content select {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Dark transparent bg */
+    border: 1px solid var(--pastel-blue);
+    color: var(--text-main);
+    padding: 12px 15px;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif; /* Matches site font */
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    box-sizing: border-box; /* Prevents spilling over */
+    outline: none;
+    transition: 0.3s;
+}
+.modal-content textarea {
+    resize: vertical;   /* Prevents horizontal stretching */
+    max-height: 150px;  /* Stops it from getting too tall */
+}
+
+/* Glow Effect when you click an input */
+.modal-content input:focus,
+.modal-content textarea:focus,
+.modal-content select:focus {
+    border-color: var(--pastel-pink);
+    box-shadow: 0 0 10px rgba(255, 194, 212, 0.2);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Style the Upload Box (The dashed area) */
+.upload-section {
+    background: rgba(163, 201, 241, 0.05) !important; /* Subtle blue tint */
+    border: 2px dashed var(--pastel-blue) !important;
+    transition: 0.3s;
+    margin-bottom: 20px !important;
+}
+
+.upload-section:hover {
+    background: rgba(163, 201, 241, 0.1) !important;
+    border-color: var(--pastel-pink) !important;
+}
+
+/* Fix the "Choose File" button colors */
+input[type="file"]::file-selector-button {
+    background: var(--pastel-blue);
+    color: #1a1a2e; /* Dark text */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 10px;
+    transition: 0.3s;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: var(--pastel-pink);
+}
+
+/* Align the Bottom Buttons */
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end; /* Pushes buttons to the right */
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.save-btn {
+    background: var(--pastel-pink);
+    color: #1a1a2e;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: transparent;
+    color: #888;
+    border: 1px solid #444;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    border-color: var(--text-main);
+    color: var(--text-main);
+}
+
+/* The Container (Mini Card) */
+.sidebar-project-item {
+    background: rgba(255, 255, 255, 0.05); /* Glassy background */
+    border: 1px solid var(--card-border);
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.sidebar-project-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px); /* Slide effect */
+    border-color: var(--pastel-blue);
+}
+
+.sidebar-info strong {
+    display: block;
+    font-size: 1rem;
+    color: var(--pastel-blue);
+    margin-bottom: 4px;
+}
+
+.sidebar-info span {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    font-style: italic;
+}
+
+/* The Action Buttons Container */
+.item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Shared Button Styles */
+.action-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+/* Edit Button */
+.edit-btn { 
+    color: var(--pastel-blue); 
+    border: 1px solid transparent;
+}
+.edit-btn:hover { 
+    background: rgba(163, 201, 241, 0.15); 
+    border-color: var(--pastel-blue);
+    transform: scale(1.1);
+}
+
+/* Delete Button */
+.delete-mini-btn {
+    color: var(--pastel-pink);
+    border: 1px solid transparent;
+}
+.delete-mini-btn:hover { 
+    background: rgba(255, 194, 212, 0.15); 
+    border-color: var(--pastel-pink);
+    transform: scale(1.1) rotate(10deg); /* Fun tilt animation */
+
+/* Bookmark Button */
+.bookmark-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.4);
+    border: none;
+    color: white;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 5;
+    transition: 0.3s;
+}
+.bookmark-btn.saved { color: var(--pastel-pink); }
+
+/* Profile Styling */
+.profile-view-header {
+    grid-column: 1 / -1; /* Spans full width of grid */
+    text-align: center;
+    padding: 40px 5%;
+    margin-bottom: 20px;
+}
+
+.back-btn {
+    /* Layout: Make it a button shape */
+    display: inline-block;
+    width: fit-content;
+    
+    /* Visuals: Match the .theme-btn style */
+    background: var(--card-bg);           /* Solid dark blue */
+    border: 1px solid var(--pastel-blue); /* Thin blue border */
+    border-radius: 20px;                  /* Rounded pill shape */
+    padding: 8px 24px;                    /* Breathable spacing */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    
+    /* Text Styling */
+    color: var(--text-main) !important;   /* Force white text (overrides JS default) */
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hover Effect: Turns blue like the other buttons */
+.back-btn:hover {
+    background: var(--pastel-blue);
+    color: var(--night-bg) !important;    /* Dark text on hover */
+    transform: translateY(-2px);          /* Slight lift */
+    box-shadow: 0 6px 12px rgba(163, 201, 241, 0.3);
+}
+
+/* Center the Profile Header */
+.profile-view-header {
+    grid-column: 1 / -1; /* Keep it spanning full width */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers items horizontally */
+    justify-content: center;
+    padding: 60px 5% 40px 5%;
+    text-align: center;
+}
+
+/* Username Styling */
+.profile-view-header .profile-name {
+    font-size: 4rem; /* Big and Bold */
+    font-weight: 700;
+    color: var(--pastel-blue);
+    margin: 10px 0;
+    font-family: 'Fredoka', sans-serif;
+}
+
+/* Back button positioning */
+.back-btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start; /* Keeps back button on the left */
+    max-width: 1200px;
+}
+
+/* Ensure the grid of posts sits neatly below */
+#main-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-posts-container {
+    width: 100%;
+    column-count: auto;
+    column-width: 260px;
+    column-gap: 20px;
+}
+
+}
+
+/* Paste this at the bottom of style.css */
+.subtitle-pill {
+  /* Positioning & Centering */
+  display: block;          /* Allows us to use margin auto */
+  width: fit-content;      /* Ensures the pill hugs the text tightly */
+  margin: 10px auto;       /* 'auto' pushes it to the center horizontally */
+  
+  /* Visual Styling */
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50px;
+  padding: 8px 20px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border: none;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+
