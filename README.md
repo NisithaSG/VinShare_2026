@@ -7,9 +7,6 @@ VinShare is a creative, anonymous sharing platform where users can collect and e
 
 ## Instructions for Running the Project
 
-### Prerequisites
-A modern web browser with an Internet Connection
-
 ### Steps to Run
 1. Download or clone this repository.
 2. Ensure the following files are in the same directory:
